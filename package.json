@@ -2,7 +2,7 @@
   "name": "arturo",
   "version": "0.1.0",
   "homepage": "https://Mutotu.github.io/arturo",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@date-io/date-fns": "^2.16.0",
     "@emotion/react": "^11.10.6",
