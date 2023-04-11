@@ -37,6 +37,8 @@ const Preview = () =>{
         .catch((err) => {
           console.log("FAILED...", err);
         });
+        alert("Your Rapport has been emailed")
+        navigate("/")
     }
     
     return <>
