@@ -28,12 +28,14 @@ const handleChange = (e)=>{
     setUserInfo(pre=>({...pre, [e.target.name]:e.target.value}))
 }
 const handleClick=()=>{
-    if(userInfo.username !== MOCKACCOUNT.username 
-        && userInfo.password !== MOCKACCOUNT.password) {
-            setErrorMessage("Incorrect Credentials")
-            return;
-        }
-    return navigate('/template')
+    if(userInfo.username === MOCKACCOUNT.username 
+        && userInfo.password === MOCKACCOUNT.password) {
+            return navigate('/template')
+        }else{ 
+    setErrorMessage("Incorrect Credentials")
+    return;
+}
+   
 }
 
     return <>
