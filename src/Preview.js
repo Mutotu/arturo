@@ -4,10 +4,13 @@ import { selectData } from './store/userInput/userInputSlice'
 import { useNavigate } from 'react-router-dom';
 import { send } from "emailjs-com";
 import { getDayNameFromDate, getMonthNameFromDate } from "./helperFuncs"
+import { updateIsLoggedIn } from './store/userInput/userInputSlice'
+import {  useDispatch } from "react-redux";
 
 const Preview = () =>{
     const selectedData = useSelector(selectData)
     const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, timeWorked} = selectedData;
+    const dispatch = useDispatch();
 
     const headersAndInputs = [
         {"DATE & LOCATION": 
@@ -52,6 +55,7 @@ const Preview = () =>{
         console.log("FAILED...", err);
       });
       alert("Your Rapport has been emailed")
+      dispatch(updateIsLoggedIn(false))
       navigate("/")
   }
     

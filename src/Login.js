@@ -3,6 +3,8 @@ import Input from './Components/Input';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import styled, { keyframes } from 'styled-components';
+import { updateIsLoggedIn } from './store/userInput/userInputSlice'
+import {  useDispatch } from "react-redux";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -70,6 +72,7 @@ const Login = () => {
   const [userInfo, setUserInfo] = useState(DEFAULT_VALUES);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setUserInfo(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -77,6 +80,7 @@ const Login = () => {
 
   const handleClick = () => {
     if (userInfo.username === MOCKACCOUNT.username && userInfo.password === MOCKACCOUNT.password) {
+      dispatch(updateIsLoggedIn(true));
       return navigate('/template');
     } else {
       setErrorMessage("Incorrect Credentials");
