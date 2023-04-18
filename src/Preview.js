@@ -35,7 +35,7 @@ const Preview = () =>{
 
     const emailParams = {
 
-      from_name: "Connector - Patrol Reposrt - " + location,
+      from_name: "Connector - Patrol Report - " + location,
       // name: "Muto lol ", email: "Will Smith",
        message:  headersAndInputs
     .map(obj => `${Object.keys(obj)[0]}: ${Object.values(obj)[0]}`)

@@ -37,6 +37,7 @@ const Template = ()=>{
       name:false,
       lastName: false,
       shiftTime: false,
+      validMile: false,
     })
     const [thereisError, setThereIsError] = useState(false)
 const setToTrue = (bool) =>{
@@ -79,6 +80,11 @@ const setToFalse = (bool) =>{
       return true
     }
     
+    if(mileage.start ==="" || mileage.end === "" || Number(mileage.start > mileage.end)){
+      setToTrue("validMile")
+      return true;
+    }
+
     if(Number(time.begHr) ===  Number(time.finishHr)){
       setToTrue("shiftTime")
       setThereIsError(true);
@@ -247,6 +253,7 @@ const setToFalse = (bool) =>{
         onChange={
             (e)=>{dispatch(updateMileage({key:"start",value:e.target.value}))}
         }
+        className={isError.validMile ? "error" : ""}
         />      
           <Input label={"End of Shift"} name={"end"} value={mileage.end} placeholder={"End of Shift"}
         onChange={(e)=>{dispatch(updateMileage({key:"end",value:e.target.value}))}
