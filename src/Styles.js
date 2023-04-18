@@ -8,4 +8,5 @@ flex-direction: column;
 export const StyledDivided = styled.div`
 border-bottom: 1px blue solid;
 padding: 2rem;
+margin: 2rem;
 `

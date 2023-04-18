@@ -3,7 +3,7 @@ import { YearPicker, MonthPicker, DayPicker } from "react-dropdown-date";
 import Dropdown from './Components/DropDown';
 import Input from './Components/Input'
 import { useSelector, useDispatch } from "react-redux";
-import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary} from './store/userInput/userInputSlice'
+import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked} from './store/userInput/userInputSlice'
 import TextArea from './Components/TextArea';
 import { useNavigate } from 'react-router-dom';
 import {StyledDiv,StyledDivided} from './Styles'
@@ -25,6 +25,7 @@ const Template = ()=>{
       lastName: false,
       shiftTime: false,
     })
+    const [timeWorked, setTimeWorked] = useState("");
 const setToTrue = (bool) =>{
   setIsError(pre => ({...pre,[bool]: true}))
 }
@@ -58,16 +59,21 @@ const setToFalse = (bool) =>{
       setToTrue("lastName")
       return true
     }
-    if(Number(time.begHr) > Number(time.finishHr)){
+    
+    if(Number(time.begHr) ===  Number(time.finishHr)){
       setToTrue("shiftTime")
       return true
+    }else{
+      let hr =Math.abs(Number(time.begHr) -  Number(time.finishHr))
+      let min =Math.abs(Number(time.begMin) -  Number(time.finishMin))
+      dispatch(updateTImeWorked(`${hr}.${min}`))
     }
     return false;
   }
     const handleClick = ()=>{
        if(!errorHandler()) navigate("/preview")
     }
-    console.log(isError)
+    console.log(selectedData)
     return <StyledDiv>
       <StyledDivided >
         <h3>Connector - Patrol {!location.includes("location") && location? " - "+location: ""}</h3>
@@ -82,7 +88,7 @@ const setToFalse = (bool) =>{
             dispatch(updateDate({key:"month",value:month}))
             setToFalse("monthError")
             }}
-        id={"monta"}
+        id={"month"}
         classes={`dropdown ${isError.monthError ? "error" : ""}`}
         optionClasses={"option"}
       />
@@ -130,8 +136,10 @@ const setToFalse = (bool) =>{
         <StyledDivided >
 
         <h2>PROTECTOR & HOURS</h2>
+        <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
         <Input className={isError.name ? "error" : ""} 
          label={"First Name"} name={"name"} value={fName.name} placeholder={"Name"}
+         className={isError.name ? "error" : ""}
         onChange={(e)=>{
             dispatch(updateName({key:"name",value:e.target.value}))
             setToFalse("name")
@@ -140,6 +148,7 @@ const setToFalse = (bool) =>{
          <Input 
           className={isError.lastName ? "error" : ""} 
           label={"Last Name"} name={"lastName"} value={fName.lastName} placeholder={"Last Name"}
+          className={isError.lastName ? "error" : ""}
         onChange={
             (e)=>{
                 dispatch(updateName({key:"lastName",value:e.target.value}))
@@ -147,6 +156,8 @@ const setToFalse = (bool) =>{
             }
         }
         />
+        </div>
+
         </StyledDivided>
         <StyledDivided >
           <div>
@@ -162,8 +173,10 @@ const setToFalse = (bool) =>{
               })}/>
           <Dropdown format={time.begMin} name={"begMin"} handleChange={(e)=>
                 dispatch(updateTime({key:"begMin", value:e.target.value}))
-          } arr={new Array(60)
-            .join().split(',').map(function(item, index){ return ++index;})}/>
+          } arr={new Array(61).join().split(',').map(function(item, index) { 
+            return index;
+          })}
+          />
         </div>
 
         <div>
@@ -176,9 +189,11 @@ const setToFalse = (bool) =>{
               (e)=>
               {dispatch(updateTime({key:"finishMin", value:e.target.value}))
               setToFalse("shiftTime");}
-          } arr={new Array(60)
-            .join().split(',').map(function(item, index){ return ++index;})}/>
-            {isError.shiftTime && <h3 style={{"textDecoration":"underline", "color":"red"}}>Finish time cannot be smaller than begin time</h3>}
+          } arr={new Array(61).join().split(',').map(function(item, index) { 
+            return index;
+          })}
+          />
+            {isError.shiftTime && <h3 style={{"textDecoration":"underline", "color":"red"}}>Finish time cannot be the same as begin time</h3>}
         </div>
         </StyledDivided>
         <StyledDivided>
@@ -204,7 +219,8 @@ const setToFalse = (bool) =>{
       </StyledDivided>
       <StyledDivided>
         <h2>Mileage</h2>
-      <Input label={"Start of Shift"} name={"start"} value={mileage.start} placeholder={"Start of shift"}
+        <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
+        <Input label={"Start of Shift"} name={"start"} value={mileage.start} placeholder={"Start of shift"}
         onChange={
             (e)=>{dispatch(updateMileage({key:"start",value:e.target.value}))}
         }
@@ -213,6 +229,9 @@ const setToFalse = (bool) =>{
         onChange={(e)=>{dispatch(updateMileage({key:"end",value:e.target.value}))}
         }
         />
+       
+        </div>
+     
         </StyledDivided>
         <div>
           <div>
@@ -227,4 +246,4 @@ const setToFalse = (bool) =>{
     </StyledDiv>
 }
 
-export default Template
+export default Template;

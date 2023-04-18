@@ -6,13 +6,14 @@ fName:{name:"",lastName:""},
 type:'',
 location:"",
 date:{ year: "", month: "", day: "" },
-time:{begHr:"", begMin:"",  finishHr:"", finishMin:"" }, 
+time:{begHr:"", begMin:"0",  finishHr:"", finishMin:"0" }, 
 calcTime:0.0,
 natureOfDetails:"",
 attireAndGear:"",
 expenses:"",
 mileage: {start:"", end:""},
 dailySummary:"",
+timeWorked:""
 }
 
 export const userInputSlice = createSlice({
@@ -45,13 +46,16 @@ export const userInputSlice = createSlice({
         },
         updateDailySummary:(state,action) => {
             state.dailySummary =  action.payload;
+        },
+        updateTImeWorked:(state,action) =>{
+            state.timeWorked = action.payload;
         }
       },
   });
   
 
 export const {
-    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary
+    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary,updateTImeWorked
   } = userInputSlice.actions;
   export const selectData = (state) => state.userinput
   export default userInputSlice.reducer;
