@@ -16,7 +16,7 @@ const Preview = () =>{
         getMonthNameFromDate(date.year + "-" +  (Number(date.month) + 1<10? "0"+String(Number(date.month)+1 ): String(Number(date.month)+1))  + "-" + Number((date.day)<10?  "0" + date.day:date.day)) 
         + " " + date.day + ", "
         + date.year
-        +" -" + location},
+        +" - " + location},
         {"PROTECTOR & HOURS": Object.values(fName).join(" ") +": " +
         (Number(time.begHr) < 10 ? "0"+time.begHr: time.begHr) 
         + "" +(Number(time.begMin) < 10 ? "0"+time.begMin: time.begMin) 
@@ -33,23 +33,27 @@ const Preview = () =>{
     ]
     const navigate = useNavigate();
 
-    const email = {name: "Muto lol ", email: "Will Smith", message:  headersAndInputs
+    const emailParams = {
+
+      from_name: "Connector - Patrol Reposrt - " + location,
+      // name: "Muto lol ", email: "Will Smith",
+       message:  headersAndInputs
     .map(obj => `${Object.keys(obj)[0]}: ${Object.values(obj)[0]}`)
     .join('\n')}
 
     const handleClick = () =>{
 
-        send("service_sd4zejf", "template_taqw4qk",email, "V7R81jovIopTKNBx8")
-        .then((response) => {
-          console.log("SUCCESS!", response.status, response.text);
+      send("service_sd4zejf", "template_taqw4qk",emailParams, "V7R81jovIopTKNBx8")
+      .then((response) => {
+        console.log("SUCCESS!", response.status, response.text);
 
-        })
-        .catch((err) => {
-          console.log("FAILED...", err);
-        });
-        alert("Your Rapport has been emailed")
-        navigate("/")
-    }
+      })
+      .catch((err) => {
+        console.log("FAILED...", err);
+      });
+      alert("Your Rapport has been emailed")
+      navigate("/")
+  }
     
     return <>
         {headersAndInputs.map(o => <Stage header={Object.keys(o)} rest={Object.values(o)} key={Object.keys(o)}/>)}

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState} from 'react'
 import { YearPicker, MonthPicker, DayPicker } from "react-dropdown-date";
 import Dropdown from './Components/DropDown';
 import Input from './Components/Input'
@@ -9,7 +9,20 @@ import { useNavigate } from 'react-router-dom';
 import {StyledDiv,StyledDivided} from './Styles'
 
 
+const styles = {
+  
+    backgroundColor: 'green',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    padding: '10px 20px',
+    fontSize: '16px',
+    fontWeight: 'bold',
+    transition: 'background-color 0.3s ease',
+  
+
+};
 const Template = ()=>{
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedData = useSelector(selectData)
@@ -25,7 +38,7 @@ const Template = ()=>{
       lastName: false,
       shiftTime: false,
     })
-    const [timeWorked, setTimeWorked] = useState("");
+    const [thereisError, setThereIsError] = useState(false)
 const setToTrue = (bool) =>{
   setIsError(pre => ({...pre,[bool]: true}))
 }
@@ -37,43 +50,53 @@ const setToFalse = (bool) =>{
   const errorHandler = ()=>{
     if (date.month === "") {
       setToTrue("monthError")
+      setThereIsError(true);
       return true;
     }
     if (date.day === "") {
       setToTrue("dayError")
+      setThereIsError(true);
       return true;
     }
     if (date.year === "") {
       setToTrue("yearError")
+      setThereIsError(true);
       return true;
     }
     if(location.includes("Pick") || location === ""){
       setToTrue("locationError")
+      setThereIsError(true);
       return true;
     }
     if(fName.name === ""){
       setToTrue("name")
+      setThereIsError(true);
       return true
     }
     if(fName.lastName === ""){
       setToTrue("lastName")
+      setThereIsError(true);
       return true
     }
     
     if(Number(time.begHr) ===  Number(time.finishHr)){
       setToTrue("shiftTime")
+      setThereIsError(true);
       return true
     }else{
       let hr =Math.abs(Number(time.begHr) -  Number(time.finishHr))
       let min =Math.abs(Number(time.begMin) -  Number(time.finishMin))
       dispatch(updateTImeWorked(`${hr}.${min}`))
     }
+    setThereIsError(false);
     return false;
   }
     const handleClick = ()=>{
+
        if(!errorHandler()) navigate("/preview")
+       else  alert("You have missing data. Scroll up, please")
     }
-    console.log(selectedData)
+    console.log(thereisError)
     return <StyledDiv>
       <StyledDivided >
         <h3>Connector - Patrol {!location.includes("location") && location? " - "+location: ""}</h3>
@@ -241,8 +264,11 @@ const setToFalse = (bool) =>{
         }}
         />
           </div>
-        <button onClick={handleClick}>Preview</button>
+        <button 
+        style={styles}
+        onClick={handleClick}>Preview</button>
         </div>
+      
     </StyledDiv>
 }
 
