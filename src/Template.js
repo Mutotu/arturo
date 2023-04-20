@@ -3,7 +3,7 @@ import { YearPicker, MonthPicker, DayPicker } from "react-dropdown-date";
 import Dropdown from './Components/DropDown';
 import Input from './Components/Input'
 import { useSelector, useDispatch } from "react-redux";
-import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked} from './store/userInput/userInputSlice'
+import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked, updateEmail} from './store/userInput/userInputSlice'
 import TextArea from './Components/TextArea';
 import { useNavigate } from 'react-router-dom';
 import {StyledDiv,StyledDivided} from './Styles'
@@ -26,7 +26,7 @@ const Template = ()=>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedData = useSelector(selectData)
-    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary} = selectedData
+    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, email} = selectedData
     const locations=["Pick your location","San Francisco","Oakland","Daly City"]
     
     const [isError,setIsError]=useState({
@@ -38,6 +38,7 @@ const Template = ()=>{
       lastName: false,
       shiftTime: false,
       validMile: false,
+      isEmail: false,
     })
     const [thereisError, setThereIsError] = useState(false)
 const setToTrue = (bool) =>{
@@ -46,7 +47,7 @@ const setToTrue = (bool) =>{
 const setToFalse = (bool) =>{
   setIsError(pre => ({...pre,[bool]: false}))
 }
-
+console.log(email)
 
   const errorHandler = ()=>{
     if (date.month === "") {
@@ -85,6 +86,12 @@ const setToFalse = (bool) =>{
       return true;
     }
 
+    if(!email.includes("@")){
+      console.log("Comeing here ", email)
+      setToTrue("isEmail");
+      return true;
+    }
+
     if(Number(time.begHr) ===  Number(time.finishHr)){
       setToTrue("shiftTime")
       setThereIsError(true);
@@ -99,8 +106,8 @@ const setToFalse = (bool) =>{
   }
     const handleClick = ()=>{
 
-       if(!errorHandler()) navigate("/preview")
-       else  alert("You have missing data. Scroll up, please")
+      if(!errorHandler()) navigate("/preview")
+      else  alert("You have missing data. Scroll up, please")
     }
     console.log(thereisError)
     return <StyledDiv>
@@ -167,14 +174,14 @@ const setToFalse = (bool) =>{
         <h2>PROTECTOR & HOURS</h2>
         <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
         <Input className={isError.name ? "error" : ""} 
-         label={"First Name"} name={"name"} value={fName.name} placeholder={"Name"}
-         className={isError.name ? "error" : ""}
+        label={"First Name"} name={"name"} value={fName.name} placeholder={"Name"}
+        className={isError.name ? "error" : ""}
         onChange={(e)=>{
             dispatch(updateName({key:"name",value:e.target.value}))
             setToFalse("name")
         }}
         />
-         <Input 
+        <Input 
           className={isError.lastName ? "error" : ""} 
           label={"Last Name"} name={"lastName"} value={fName.lastName} placeholder={"Last Name"}
           className={isError.lastName ? "error" : ""}
@@ -186,8 +193,22 @@ const setToFalse = (bool) =>{
         }
         />
         </div>
+        </StyledDivided>
+
+        <StyledDivided>
+        <h2>Email</h2>
+        <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
+        <Input label={"Email"} name={"email"} value={email} placeholder={"email"} type="email"
+        onChange={
+            (e)=>{dispatch(updateEmail(e.target.value))}
+        }
+        className={isError.isEmail ? "error" : ""}
+        />      
+
+        </div>
 
         </StyledDivided>
+
         <StyledDivided >
           <div>
             <h2>Shift start time</h2>
@@ -211,7 +232,7 @@ const setToFalse = (bool) =>{
         <div>
             <p>Finish:</p>
           <Dropdown format={time.finishHr} name={"finishHr"} handleChange={(e)=>
-               dispatch(updateTime({key:"finishHr", value:e.target.value})) 
+              dispatch(updateTime({key:"finishHr", value:e.target.value})) 
           } arr={new Array(24)
             .join().split(',').map(function(item, index){ return ++index;})}/>
           <Dropdown format={time.finishMin} name={"finishMin"} handleChange={
@@ -259,9 +280,8 @@ const setToFalse = (bool) =>{
         onChange={(e)=>{dispatch(updateMileage({key:"end",value:e.target.value}))}
         }
         />
-       
-        </div>
-     
+
+        </div>     
         </StyledDivided>
         <div>
           <div>

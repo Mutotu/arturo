@@ -3,7 +3,7 @@ import Login from './Login'
 import Template from './Template'
 import Preview from "./Preview"
 import './App.css';
-import { updateIsLoggedIn, selectData } from './store/userInput/userInputSlice'
+import { selectData } from './store/userInput/userInputSlice'
 import { useSelector } from "react-redux";
 
 function App() {
@@ -28,15 +28,5 @@ function App() {
     </div>
   );
 }
-//   return (
-//     <div className="App">
-//       <Routes>
-//         <Route path="/" element={<Login />} />
-//         <Route path="/template" element={<Template />} />
-//         <Route path="/preview" element={<Preview />} />
-//       </Routes>
-//     </div>
-//   );
-// }
 
 export default App;

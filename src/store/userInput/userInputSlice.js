@@ -14,7 +14,8 @@ expenses:"",
 mileage: {start:"", end:""},
 dailySummary:"",
 timeWorked:"",
-isLoggedIn: false
+isLoggedIn: false,
+email:""
 }
 
 export const userInputSlice = createSlice({
@@ -52,14 +53,20 @@ export const userInputSlice = createSlice({
             state.timeWorked = action.payload;
         },
         updateIsLoggedIn:(state, action) =>{
-            state.isLoggedIn = action.payload
+            state.isLoggedIn = action.payload;
+        },
+        updateEmail:(state,action) => {
+            state.email = action.payload;
+        },
+        updateAll:(state)=>{
+            state = initialState;
         }
       },
   });
   
 
 export const {
-    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary,updateTImeWorked, updateIsLoggedIn
+    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary,updateTImeWorked, updateIsLoggedIn, updateEmail, updateAll
   } = userInputSlice.actions;
   export const selectData = (state) => state.userinput
   export default userInputSlice.reducer;

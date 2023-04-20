@@ -2,14 +2,13 @@ import { useSelector} from "react-redux";
 import Stage from "./Components/Stage";
 import { selectData } from './store/userInput/userInputSlice'
 import { useNavigate } from 'react-router-dom';
-import { send } from "emailjs-com";
 import { getDayNameFromDate, getMonthNameFromDate } from "./helperFuncs"
-import { updateIsLoggedIn } from './store/userInput/userInputSlice'
+import { updateIsLoggedIn, updateAll } from './store/userInput/userInputSlice'
 import {  useDispatch } from "react-redux";
 
 const Preview = () =>{
     const selectedData = useSelector(selectData)
-    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, timeWorked} = selectedData;
+    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, email} = selectedData;
     const dispatch = useDispatch();
 
     const headersAndInputs = [
@@ -36,27 +35,15 @@ const Preview = () =>{
     ]
     const navigate = useNavigate();
 
-    const emailParams = {
-
-      from_name: "Connector - Patrol Report - " + location,
-      // name: "Muto lol ", email: "Will Smith",
-       message:  headersAndInputs
-    .map(obj => `${Object.keys(obj)[0]}: ${Object.values(obj)[0]}`)
-    .join('\n')}
-
     const handleClick = () =>{
 
-      send("service_sd4zejf", "template_taqw4qk",emailParams, "V7R81jovIopTKNBx8")
-      .then((response) => {
-        console.log("SUCCESS!", response.status, response.text);
-
-      })
-      .catch((err) => {
-        console.log("FAILED...", err);
-      });
-      alert("Your Rapport has been emailed")
+      const recipient = 'recipient@example.com'; 
+      const subject = 'Connector - Patrol - ' + location; 
+      const body = encodeURIComponent(headersAndInputs.map(obj => `${Object.keys(obj)[0]}: ${Object.values(obj)[0]}`).join('\n'));
+      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
       dispatch(updateIsLoggedIn(false))
       navigate("/")
+      dispatch(updateAll());
   }
     
     return <>
