@@ -2,71 +2,11 @@ import React from 'react';
 import Input from './Components/Input';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import styled, { keyframes } from 'styled-components';
 import { updateIsLoggedIn } from './store/userInput/userInputSlice'
 import {  useDispatch } from "react-redux";
+import { StyledButton, glowing, StyledError, StyledTitle, StyledForm, StyledContainer } from './Styles';
+import { DEFAULT_VALUES, MOCKACCOUNT} from "./defaultData";
 
-const StyledContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-`;
-
-const StyledForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 600px;
-  padding: 2rem;
-  background-color: #f8f8f8;
-  border-radius: 10px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
-`;
-
-const StyledTitle = styled.h2`
-  margin-top: 0;
-  text-decoration: underline;
-`;
-
-const StyledError = styled.h3`
-  margin-top: 0.5rem;
-  text-decoration: underline;
-  color: red;
-`;
-
-const glowing = keyframes`
-  0% {
-    box-shadow: 0 0 5px #ff00e5;
-  }
-  50% {
-    box-shadow: 0 0 20px #ff00e5, 0 0 30px #ff00e5, 0 0 40px #ff00e5, 0 0 50px #ff00e5;
-  }
-  100% {
-    box-shadow: 0 0 5px #ff00e5;
-  }
-`;
-
-const StyledButton = styled.button`
-  margin-top: 1rem;
-  background-color: pink;
-  color: #fff;
-  border: none;
-  width: 100%;
-  height: 40px;
-  border-radius: 5px;
-  cursor: pointer;
-  outline: none;
-  &:hover {
-    background-color: #ff00e5;
-    box-shadow: 0px 0px 10px rgba(255, 0, 229, 0.7);
-    animation: ${glowing} 2s infinite;
-  }
-`;
-
-const DEFAULT_VALUES = { username: '', password: '' };
-const MOCKACCOUNT = { username: "test", password: "123" };
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState(DEFAULT_VALUES);

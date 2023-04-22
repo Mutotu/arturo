@@ -3,19 +3,21 @@ import Stage from "./Components/Stage";
 import { selectData } from './store/userInput/userInputSlice'
 import { useNavigate } from 'react-router-dom';
 import { getDayNameFromDate, getMonthNameFromDate } from "./helperFuncs"
-import { updateIsLoggedIn, updateAll } from './store/userInput/userInputSlice'
+import { updateAll } from './store/userInput/userInputSlice'
 import {  useDispatch } from "react-redux";
 
 const Preview = () =>{
     const selectedData = useSelector(selectData)
     const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, email} = selectedData;
     const dispatch = useDispatch();
+    const {year, month, day} = date;
+    const numberedMonth = Number(month);
 
     const headersAndInputs = [
         {"DATE & LOCATION": 
-        getDayNameFromDate(date.year + "-" +  (Number(date.month) + 1<10? "0"+String(Number(date.month)+1 ): String(Number(date.month)+1))  + "-" + Number((date.day)<10?  "0" + date.day:date.day)) +
+        getDayNameFromDate(year + "-" +  (numberedMonth + 1 < 10 ? "0" + String(Number(month)+1 ): String(Number(month)+1))  + "-" + Number((day)<10?  "0" + day:day)) +
         ", "+
-        getMonthNameFromDate(date.year + "-" +  (Number(date.month) + 1<10? "0"+String(Number(date.month)+1 ): String(Number(date.month)+1))  + "-" + Number((date.day)<10?  "0" + date.day:date.day)) 
+        getMonthNameFromDate(year + "-" +  (numberedMonth + 1 < 10 ? "0" + String(Number(month)+1 ): String(Number(month)+1))  + "-" + Number((day)<10?  "0" + day:day)) 
         + " " + date.day + ", "
         + date.year
         +" - " + location},
@@ -33,24 +35,29 @@ const Preview = () =>{
         {"DAILY SUMMARY": dailySummary},
 
     ]
+
     const navigate = useNavigate();
 
     const handleClick = () =>{
 
-      const recipient = 'recipient@example.com'; 
-      const subject = 'Connector - Patrol - ' + location; 
-      const body = encodeURIComponent(headersAndInputs.map(obj => `${Object.keys(obj)[0]}: ${Object.values(obj)[0]}`).join('\n'));
-      window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
-      dispatch(updateIsLoggedIn(false))
-      navigate("/")
-      dispatch(updateAll());
-  }
+    const recipient = 'recipient@example.com'; 
+    const subject = 'Connector - Patrol - ' + location; 
+    const body = encodeURIComponent(headersAndInputs.map(obj => `${Object.keys(obj)[0]}:
+     ${Object.values(obj)[0]}`).join('\n'));
+    window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+
+    dispatch(updateAll());
+    navigate("/")
+ 
+}
     
     return <>
         {headersAndInputs.map(o => <Stage header={Object.keys(o)} rest={Object.values(o)} key={Object.keys(o)}/>)}
-        <button onClick={()=>navigate("/template")}>Edit</button>
-        <button onClick={handleClick}>Send</button>
-          </>
+        <div>
+        <button style={{"width":"3.5rem", "height":"1.5rem", "margin":"3px", "fontSize":"1.2rem"}}onClick={()=>navigate("/template")}>Edit</button>
+        <button style={{"width":"3.5rem", "height":"1.5rem",  "margin":"3px", "fontSize":"1.2rem"}} onClick={handleClick}>Send</button>
+        </div>
+        </>
 
 }
 

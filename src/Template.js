@@ -1,33 +1,22 @@
-import React, { useState} from 'react'
+import React, { useState} from 'react';
 import { YearPicker, MonthPicker, DayPicker } from "react-dropdown-date";
 import Dropdown from './Components/DropDown';
-import Input from './Components/Input'
+import Input from './Components/Input';
 import { useSelector, useDispatch } from "react-redux";
-import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked, updateEmail} from './store/userInput/userInputSlice'
+import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked, updateEmail} from './store/userInput/userInputSlice';
 import TextArea from './Components/TextArea';
 import { useNavigate } from 'react-router-dom';
-import {StyledDiv,StyledDivided} from './Styles'
+import { StyledDiv,StyledDivided, styles, inputContainer} from './Styles';
+import { locations } from './defaultData';
 
 
-const styles = {
-  
-    backgroundColor: 'green',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    padding: '10px 20px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    transition: 'background-color 0.3s ease',
-  
 
-};
 const Template = ()=>{
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedData = useSelector(selectData)
     const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, email} = selectedData
-    const locations=["Pick your location","San Francisco","Oakland","Daly City"]
     
     const [isError,setIsError]=useState({
       monthError:false,
@@ -47,7 +36,7 @@ const setToTrue = (bool) =>{
 const setToFalse = (bool) =>{
   setIsError(pre => ({...pre,[bool]: false}))
 }
-console.log(email)
+
 
   const errorHandler = ()=>{
     if (date.month === "") {
@@ -86,11 +75,11 @@ console.log(email)
       return true;
     }
 
-    if(!email.includes("@")){
-      console.log("Comeing here ", email)
-      setToTrue("isEmail");
-      return true;
-    }
+    // if(!email.includes("@")){
+    //   console.log("Comeing here ", email)
+    //   setToTrue("isEmail");
+    //   return true;
+    // }
 
     if(Number(time.begHr) ===  Number(time.finishHr)){
       setToTrue("shiftTime")
@@ -163,7 +152,7 @@ console.log(email)
           setToFalse("locationError") }
           }
           className={`dropdown ${isError.locationError ? "error" : ""}`}
-         >
+      >
             {locations.map(l=><option  key={l} value={l}>{l}</option>)}
         </select>
         </div>
@@ -172,7 +161,7 @@ console.log(email)
         <StyledDivided >
 
         <h2>PROTECTOR & HOURS</h2>
-        <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
+        <div style={inputContainer}>
         <Input className={isError.name ? "error" : ""} 
         label={"First Name"} name={"name"} value={fName.name} placeholder={"Name"}
         className={isError.name ? "error" : ""}
@@ -194,10 +183,10 @@ console.log(email)
         />
         </div>
         </StyledDivided>
-
+{/* 
         <StyledDivided>
         <h2>Email</h2>
-        <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
+        <div style={inputContainer}>
         <Input label={"Email"} name={"email"} value={email} placeholder={"email"} type="email"
         onChange={
             (e)=>{dispatch(updateEmail(e.target.value))}
@@ -207,7 +196,7 @@ console.log(email)
 
         </div>
 
-        </StyledDivided>
+        </StyledDivided> */}
 
         <StyledDivided >
           <div>
@@ -270,13 +259,13 @@ console.log(email)
       <StyledDivided>
         <h2>Mileage</h2>
         <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
-        <Input label={"Start of Shift"} name={"start"} value={mileage.start} placeholder={"Start of shift"}
+        <Input label={"Start of Shift"} name={"start"} value={mileage.start} placeholder={"Start of shift"} type="number"
         onChange={
             (e)=>{dispatch(updateMileage({key:"start",value:e.target.value}))}
         }
         className={isError.validMile ? "error" : ""}
         />      
-          <Input label={"End of Shift"} name={"end"} value={mileage.end} placeholder={"End of Shift"}
+          <Input label={"End of Shift"} name={"end"} value={mileage.end} placeholder={"End of Shift"} type="number"
         onChange={(e)=>{dispatch(updateMileage({key:"end",value:e.target.value}))}
         }
         />
@@ -286,16 +275,11 @@ console.log(email)
         <div>
           <div>
           <TextArea label={"DAILY SUMMARY"} name={"dailySummary"} value={dailySummary} placeholder={"Daily Summary"}
-        onChange={(e)=>{
-            dispatch(updateDailySummary(e.target.value))
-        }}
+        onChange={ (e)=>{ dispatch(updateDailySummary(e.target.value)) } }
         />
           </div>
-        <button 
-        style={styles}
-        onClick={handleClick}>Preview</button>
+        <button style={styles} onClick={handleClick}>Preview</button>
         </div>
-      
     </StyledDiv>
 }
 

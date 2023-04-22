@@ -59,9 +59,9 @@ export const userInputSlice = createSlice({
             state.email = action.payload;
         },
         updateAll:(state)=>{
-            state = initialState;
-        }
+           return initialState;
       },
+    }
   });
   
 

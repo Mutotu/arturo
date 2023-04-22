@@ -1,10 +1,15 @@
-const Stage = ({header,rest}) =>{
+import { headerStyle, restStyle,StyledDiv,StyledDivided} from "../Styles";
 
-    return <div style={{"borderBottom":"1px solid black"}}>
-        <h2 style={{"textDecoration":"underline"}}>{header}</h2>
-        <h4>{rest[0] === "" ? "N/A" : rest}</h4>
-           </div>
+const Stage = ({header, rest}) => {
 
-}
+    return (
+        <StyledDiv>
+            <StyledDivided>
+            <h2 style={headerStyle}>{header}</h2>
+            <h4 style={restStyle}>{rest[0] === "" ? "N/A" : rest}</h4>
+            </StyledDivided>
+        </StyledDiv>
+    );
+};
 
 export default Stage;

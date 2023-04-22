@@ -4,8 +4,8 @@ import uiReducer from "./ui/uiSlice"
 
 const store = configureStore({
   reducer: {
-       userinput: userInputReducer,
-       ui: uiReducer
+      userinput: userInputReducer,
+      ui: uiReducer
 },
 });
 
