@@ -75,11 +75,6 @@ const setToFalse = (bool) =>{
       return true;
     }
 
-    // if(!email.includes("@")){
-    //   console.log("Comeing here ", email)
-    //   setToTrue("isEmail");
-    //   return true;
-    // }
 
     if(Number(time.begHr) ===  Number(time.finishHr)){
       setToTrue("shiftTime")
@@ -98,11 +93,13 @@ const setToFalse = (bool) =>{
       if(!errorHandler()) navigate("/preview")
       else  alert("You have missing data. Scroll up, please")
     }
-    console.log(thereisError)
+    const mandotoryInput = <p style={{"textDecoration": "underline"}}>Your input is needed where * is</p>
+    const star = <span style={{"color": "red", "fontSize": "3rem"}}>*</span>
     return <StyledDiv>
+      {mandotoryInput}
       <StyledDivided >
         <h3>Connector - Patrol {!location.includes("location") && location? " - "+location: ""}</h3>
-        <h2>DATE & LOCATION:</h2>
+        <h2>DATE & LOCATION: {star}</h2>
         <MonthPicker
         defaultValue={"MM"}
         numeric 
@@ -160,7 +157,7 @@ const setToFalse = (bool) =>{
       
         <StyledDivided >
 
-        <h2>PROTECTOR & HOURS</h2>
+        <h2>PROTECTOR & HOURS {star}</h2>
         <div style={inputContainer}>
         <Input className={isError.name ? "error" : ""} 
         label={"First Name"} name={"name"} value={fName.name} placeholder={"Name"}
@@ -183,24 +180,9 @@ const setToFalse = (bool) =>{
         />
         </div>
         </StyledDivided>
-{/* 
-        <StyledDivided>
-        <h2>Email</h2>
-        <div style={inputContainer}>
-        <Input label={"Email"} name={"email"} value={email} placeholder={"email"} type="email"
-        onChange={
-            (e)=>{dispatch(updateEmail(e.target.value))}
-        }
-        className={isError.isEmail ? "error" : ""}
-        />      
-
-        </div>
-
-        </StyledDivided> */}
-
         <StyledDivided >
           <div>
-            <h2>Shift start time</h2>
+            <h2>Shift time {star}</h2>
             <p>Begin:</p>
             <Dropdown format={time.begHr} name={"begHr"} handleChange={(e)=>
                 { dispatch(updateTime({key:"begHr", value:e.target.value}))
@@ -257,7 +239,7 @@ const setToFalse = (bool) =>{
         />
       </StyledDivided>
       <StyledDivided>
-        <h2>Mileage</h2>
+        <h2>Mileage {star}</h2>
         <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
         <Input label={"Start of Shift"} name={"start"} value={mileage.start} placeholder={"Start of shift"} type="number"
         onChange={
