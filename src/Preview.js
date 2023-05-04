@@ -49,8 +49,8 @@ const Preview = () =>{
     }).join(''));
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
 
-    // dispatch(updateAll());
-    // navigate("/")
+    dispatch(updateAll());
+    navigate("/")
  
 }
     
