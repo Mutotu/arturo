@@ -42,18 +42,15 @@ const Preview = () =>{
 
     const recipient = 'recipient@example.com'; 
     const subject = 'Connector - Patrol - ' + location; 
-    const body = encodeURIComponent(headersAndInputs.map(obj => `
-    
-    ${Object.keys(obj)[0]}:
-
-    ${Object.values(obj)[0]}
-
-
-    `).join('\n'));
+    const body = encodeURIComponent(headersAndInputs.map((obj, index) => {
+        const header = Object.keys(obj)[0];
+        const value = Object.values(obj)[0];
+        return index === 0 ? `${header}:\n${value}` : `\n\n${header}:\n${value}`;
+    }).join(''));
     window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
 
-    dispatch(updateAll());
-    navigate("/")
+    // dispatch(updateAll());
+    // navigate("/")
  
 }
     
