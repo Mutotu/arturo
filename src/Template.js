@@ -28,6 +28,9 @@ const Template = ()=>{
       shiftTime: false,
       validMile: false,
       isEmail: false,
+      isNatureOfDetails: false,
+      isAttireAndGear: false,
+      isDailySummary: false
     })
     const [thereisError, setThereIsError] = useState(false)
 const setToTrue = (bool) =>{
@@ -69,13 +72,25 @@ const setToFalse = (bool) =>{
       setThereIsError(true);
       return true
     }
-    
+    if(natureOfDetails == ""){
+      setToTrue("isNatureOfDetails")
+      setThereIsError(true);
+      return true
+    }
+    if(attireAndGear == ""){
+      setToTrue("isAttireAndGear")
+      setThereIsError(true);
+      return true
+    }
     if(mileage.start ==="" || mileage.end === "" || Number(mileage.start > mileage.end)){
       setToTrue("validMile")
       return true;
     }
-
-
+    if(dailySummary == ""){
+      setToTrue("isDailySummary")
+      setThereIsError(true);
+      return true
+    }
     if(Number(time.begHr) ===  Number(time.finishHr)){
       setToTrue("shiftTime")
       setThereIsError(true);
@@ -85,6 +100,7 @@ const setToFalse = (bool) =>{
       let min =Math.abs(Number(time.begMin) -  Number(time.finishMin))
       dispatch(updateTImeWorked(`${hr}.${min}`))
     }
+
     setThereIsError(false);
     return false;
   }
@@ -93,8 +109,16 @@ const setToFalse = (bool) =>{
       if(!errorHandler()) navigate("/preview")
       else  alert("You have missing data. Scroll up, please")
     }
-    const mandotoryInput = <p style={{"textDecoration": "underline"}}>Your input is needed where * is</p>
     const star = <span style={{"color": "red", "fontSize": "3rem"}}>*</span>
+    const mandotoryInput = <p style={{
+      "color": 'red',
+      "fontWeight": 'bold',
+      "fontSize": '16px',
+      "textAlign": 'center',
+      "backgroundColor": 'yellow',
+      "padding": '10px'
+    }}>Your input is needed where <span style={{"fontSize":"2rem"}}>*</span> is</p>
+   
     return <StyledDiv>
       {mandotoryInput}
       <StyledDivided >
@@ -232,7 +256,7 @@ const setToFalse = (bool) =>{
         />
         </StyledDivided>
         <StyledDivided>
-        <TextArea label={"EXPENSES"} name={"expenses"} value={expenses} placeholder={"Expenses"}
+        <TextArea label={"EXPENSES"} name={"expenses"} value={expenses} placeholder={"None"}
         onChange={(e)=>{
             dispatch(updateExpenses(e.target.value))
         }}

@@ -28,11 +28,11 @@ const Preview = () =>{
         (Number(time.finishHr) < 10 ? "0"+time.finishHr: time.finishHr) 
         + "" +(Number(time.finishMin) < 10 ? "0"+time.finishMin: time.finishMin) 
     },
-        {"NATURE OF DETAILS": natureOfDetails ? natureOfDetails : "None"},
-        {"ATTIRE & GEAR": attireAndGear ? attireAndGear : "None"},
+        {"NATURE OF DETAILS": natureOfDetails},
+        {"ATTIRE & GEAR": attireAndGear },
         {"EXPENSES": expenses ? expenses : "None"},
         {"MILEAGE": "Start of Shift: " + mileage.start +" // " + "End of Shift: "+mileage.end},
-        {"DAILY SUMMARY": dailySummary ? dailySummary : "None"},
+        {"DAILY SUMMARY": dailySummary },
 
     ]
 
