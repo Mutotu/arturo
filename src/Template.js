@@ -3,7 +3,7 @@ import { YearPicker, MonthPicker, DayPicker } from "react-dropdown-date";
 import Dropdown from './Components/DropDown';
 import Input from './Components/Input';
 import { useSelector, useDispatch } from "react-redux";
-import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked, updateEmail} from './store/userInput/userInputSlice';
+import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked, updateAnomalies, updateNotes, updateEmail} from './store/userInput/userInputSlice';
 import TextArea from './Components/TextArea';
 import { useNavigate } from 'react-router-dom';
 import { StyledDiv,StyledDivided, styles, inputContainer} from './Styles';
@@ -16,7 +16,7 @@ const Template = ()=>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedData = useSelector(selectData)
-    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, email} = selectedData
+    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary,anomalies, notes, email} = selectedData
     
     const [isError,setIsError]=useState({
       monthError:false,
@@ -105,7 +105,6 @@ const setToFalse = (bool) =>{
     return false;
   }
     const handleClick = ()=>{
-
       if(!errorHandler()) navigate("/preview")
       else  alert("You have missing data. Scroll up, please")
     }
@@ -252,6 +251,19 @@ const setToFalse = (bool) =>{
         <TextArea label={"ATTIRE & GEAR"} name={"attireAndGear"} value={attireAndGear} placeholder={"Attire and Gear"}
         onChange={(e)=>{
             dispatch(updateAttireAndGear(e.target.value))
+        }}
+        />
+        </StyledDivided>
+        <StyledDivided>
+        <TextArea label={"ANOMALIES"} name={"anomalies"} value={anomalies} placeholder={"Anomalies"}
+        onChange={(e)=>{
+            dispatch(updateAnomalies(e.target.value))
+        }}
+        />
+        </StyledDivided> <StyledDivided>
+        <TextArea label={"NOTES"} name={"notes"} value={notes} placeholder={"Notes"}
+        onChange={(e)=>{
+            dispatch(updateNotes(e.target.value))
         }}
         />
         </StyledDivided>

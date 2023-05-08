@@ -15,7 +15,9 @@ mileage: {start:"", end:""},
 dailySummary:"",
 timeWorked:"",
 isLoggedIn: false,
-email:""
+email:"",
+anomalies: "",
+notes: "",
 }
 
 export const userInputSlice = createSlice({
@@ -61,12 +63,19 @@ export const userInputSlice = createSlice({
         updateAll:(state)=>{
            return initialState;
       },
+      updateAnomalies:(state,action) => {
+          state.anomalies = action.payload;
+      },
+      updateNotes: (state, action) => {
+          state.notes = action.payload;
+      }
     }
   });
   
 
 export const {
-    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary,updateTImeWorked, updateIsLoggedIn, updateEmail, updateAll
+    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary,updateTImeWorked, updateIsLoggedIn, updateEmail, updateAll, updateAnomalies, updateNotes
   } = userInputSlice.actions;
   export const selectData = (state) => state.userinput
   export default userInputSlice.reducer;
+

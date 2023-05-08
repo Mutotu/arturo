@@ -8,7 +8,7 @@ import {  useDispatch } from "react-redux";
 
 const Preview = () =>{
     const selectedData = useSelector(selectData)
-    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary, email} = selectedData;
+    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary,anomalies, notes, email} = selectedData;
     const dispatch = useDispatch();
     const {year, month, day} = date;
     const numberedMonth = Number(month);
@@ -33,6 +33,16 @@ const Preview = () =>{
         {"EXPENSES": expenses ? expenses : "None"},
         {"MILEAGE": "Start of Shift: " + mileage.start +" // " + "End of Shift: "+mileage.end},
         {"DAILY SUMMARY": dailySummary },
+        {"ANOMALIES": anomalies ? anomalies : "N/A"},
+        {"NOTES": notes ? notes : "N/A"},
+        {"Contacts": `
+        Example(Director - Gloabl Protective Solutions): 123-456-7890
+        Example(Director - Gloabl Protective Solutions): 123-456-7890
+        Example(Director - Gloabl Protective Solutions): 123-456-7890
+        Example(Director - Gloabl Protective Solutions): 123-456-7890
+        Example(Director - Gloabl Protective Solutions): 123-456-7890
+        `
+        }
 
     ]
 
