@@ -28,7 +28,7 @@ const Preview = () =>{
         (Number(time.finishHr) < 10 ? "0"+time.finishHr: time.finishHr) 
         + "" +(Number(time.finishMin) < 10 ? "0"+time.finishMin: time.finishMin) 
     },
-        {"NATURE OF DETAILS": natureOfDetails},
+        {"NATURE OF DETAILS": "Provide agile response and security support for key Members of Leadership for Connector."},
         {"ATTIRE & GEAR": attireAndGear },
         {"EXPENSES": expenses ? expenses : "None"},
         {"MILEAGE": "Start of Shift: " + mileage.start +" // " + "End of Shift: "+mileage.end},
@@ -51,7 +51,7 @@ const Preview = () =>{
     const handleClick = () =>{
 
     const recipient = 'recipient@example.com'; 
-    const subject = 'Connector - Patrol - ' + location; 
+    const subject = 'Connector - Patrol Report - ' + location; 
     const body = encodeURIComponent(headersAndInputs.map((obj, index) => {
         const header = Object.keys(obj)[0];
         const value = Object.values(obj)[0];

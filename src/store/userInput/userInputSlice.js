@@ -46,7 +46,7 @@ export const userInputSlice = createSlice({
             state.expenses = action.payload;
         },
         updateMileage:(state,action) => {
-            state.mileage[action.payload.key] = action.payload.value;
+            state.mileage[action.payload.key] = action.payload.value > 0 ? action.payload.value :0;
         },
         updateDailySummary:(state,action) => {
             state.dailySummary =  action.payload;

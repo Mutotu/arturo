@@ -12,7 +12,7 @@ import { locations } from './defaultData';
 
 
 const Template = ()=>{
-
+  const [expanded, setExpanded] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedData = useSelector(selectData)
@@ -121,11 +121,11 @@ const setToFalse = (bool) =>{
     return <StyledDiv>
       {mandotoryInput}
       <StyledDivided >
-        <h3>Connector - Patrol {!location.includes("location") && location? " - "+location: ""}</h3>
+        <h3>Connector - Patrol Report{!location.includes("location") && location? " - "+location: ""}</h3>
         <h2>DATE & LOCATION: {star}</h2>
         <MonthPicker
-        defaultValue={"MM"}
-        numeric 
+        defaultValue={"Month"}
+        // numeric 
         endYearGiven 
         year={date.year} 
         value={date.month} 
@@ -138,7 +138,7 @@ const setToFalse = (bool) =>{
         optionClasses={"option"}
       />
       <DayPicker
-        defaultValue={"DD"}
+        defaultValue={"Day"}
         year={date.year} 
         month={date.month} 
         endYearGiven 
@@ -153,7 +153,7 @@ const setToFalse = (bool) =>{
       />
 
       <YearPicker
-        defaultValue={"YYYY"}
+        defaultValue={"Year"}
         start={2023} 
         end={2023} 
         reverse 
@@ -241,7 +241,8 @@ const setToFalse = (bool) =>{
         </div>
         </StyledDivided>
         <StyledDivided>
-          <TextArea label={"NATURE OF DETAILS"} name={"natureOfDetails"} value={natureOfDetails} placeholder={"Nature of Details"}
+          <TextArea label={"NATURE OF DETAILS"} name={"natureOfDetails"} value={natureOfDetails} placeholder={"Provide agile response and security support for key Members of Leadership for Connector. "}
+          readOnly="readOnly"
         onChange={(e)=>{
             dispatch(updateNatureOfDetails(e.target.value))
         }}
@@ -292,8 +293,11 @@ const setToFalse = (bool) =>{
         </StyledDivided>
         <div>
           <div>
-          <TextArea label={"DAILY SUMMARY"} name={"dailySummary"} value={dailySummary} placeholder={"Daily Summary"}
+          <TextArea label={"DAILY SUMMARY"} name={"dailySummary"} value={dailySummary} placeholder={"Daily Summary"} max={expanded}
         onChange={ (e)=>{ dispatch(updateDailySummary(e.target.value)) } }
+        onClick={() => {setExpanded(true)
+      console.log(expanded)}
+    }
         />
           </div>
         <button style={styles} onClick={handleClick}>Preview</button>
