@@ -43,7 +43,6 @@ const Preview = () =>{
         Example(Director - Gloabl Protective Solutions): 123-456-7890
         `
         }
-
     ]
 
     const navigate = useNavigate();
@@ -65,7 +64,7 @@ const Preview = () =>{
 }
     
     return <>
-        {headersAndInputs.map(o => <Stage header={Object.keys(o)} rest={Object.values(o)} key={Object.keys(o)}/>)}
+        {headersAndInputs.map(o => <Stage  header={Object.keys(o)} rest={Object.values(o)} key={Object.keys(o)}/>)}
         <div>
         <button style={{"width":"3.5rem", "height":"1.5rem", "margin":"3px", "fontSize":"1.2rem"}}onClick={()=>navigate("/template")}>Edit</button>
         <button style={{"width":"3.5rem", "height":"1.5rem",  "margin":"3px", "fontSize":"1.2rem"}} onClick={handleClick}>Send</button>

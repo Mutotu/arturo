@@ -42,6 +42,7 @@ const setToFalse = (bool) =>{
 
 
   const errorHandler = ()=>{
+    
     if (date.month === "") {
       setToTrue("monthError")
       setThereIsError(true);
@@ -62,6 +63,7 @@ const setToFalse = (bool) =>{
       setThereIsError(true);
       return true;
     }
+    
     if(fName.name === ""){
       setToTrue("name")
       setThereIsError(true);
@@ -72,21 +74,23 @@ const setToFalse = (bool) =>{
       setThereIsError(true);
       return true
     }
-    if(natureOfDetails == ""){
-      setToTrue("isNatureOfDetails")
-      setThereIsError(true);
-      return true
-    }
-    if(attireAndGear == ""){
+    
+    // if(natureOfDetails === ""){
+    //   setToTrue("isNatureOfDetails")
+    //   setThereIsError(true);
+    //   return true
+    // }
+    if(attireAndGear === ""){
       setToTrue("isAttireAndGear")
       setThereIsError(true);
       return true
     }
+  
     if(mileage.start ==="" || mileage.end === "" || Number(mileage.start > mileage.end)){
       setToTrue("validMile")
       return true;
     }
-    if(dailySummary == ""){
+    if(dailySummary === ""){
       setToTrue("isDailySummary")
       setThereIsError(true);
       return true
@@ -102,9 +106,11 @@ const setToFalse = (bool) =>{
     }
 
     setThereIsError(false);
+    
     return false;
   }
     const handleClick = ()=>{
+      console.log(dailySummary.split(/(\d.*?:)/g))
       if(!errorHandler()) navigate("/preview")
       else  alert("You have missing data. Scroll up, please")
     }
@@ -209,14 +215,27 @@ const setToFalse = (bool) =>{
             <p>Begin:</p>
             <Dropdown format={time.begHr} name={"begHr"} handleChange={(e)=>
                 { dispatch(updateTime({key:"begHr", value:e.target.value}))
-                setToFalse("shiftTime");}
+                setToFalse("shiftTime");
+                let hr = Math.abs(Number(time.begHr));
+                let finishHr = Math.abs(Number(time.finishHr));
+                let times = [];
+                times.push( hr - 1 < 10 ? "0"+ (hr-1 ) + "55: ": (hr - 1) + "55: ");
+                // times.push(hr < 10 ? "0"+ hr  + "05: ": hr - 1 + "05: ");
+                for(let i = hr; i < hr + 9; i ++ ){
+                    // times.push(i + "00: ")
+                    times.push(i < 10 ? "0"+ i  + "00: ": i  + "00: ");
+                  }
+                  times.splice(2, 0, (hr < 10 ? "0"+ hr  + "05: ": hr - 1 + "05: "));
+                dispatch(updateDailySummary(times.join("\n\n\n")))
+              }
               
             } arr={new Array(24)
             .join().split(',').map(function(item, index){
               return ++index;
               })}/>
-          <Dropdown format={time.begMin} name={"begMin"} handleChange={(e)=>
-                dispatch(updateTime({key:"begMin", value:e.target.value}))
+          <Dropdown format={time.begMin} name={"begMin"} handleChange={(e)=> {
+            dispatch(updateTime({key:"begMin", value:e.target.value}))
+          }
           } arr={new Array(61).join().split(',').map(function(item, index) { 
             return index;
           })}
@@ -294,9 +313,13 @@ const setToFalse = (bool) =>{
         <div>
           <div>
           <TextArea label={"DAILY SUMMARY"} name={"dailySummary"} value={dailySummary} placeholder={"Daily Summary"} max={expanded}
-        onChange={ (e)=>{ dispatch(updateDailySummary(e.target.value)) } }
-        onClick={() => {setExpanded(true)
-      console.log(expanded)}
+        onChange={ (e)=>{
+          dispatch(updateDailySummary(e.target.value))
+        }
+      } 
+        onClick={() => {
+          setExpanded(true)
+    }
     }
         />
           </div>
