@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/arturo/static/css/main.e405cf95.css",
-    "main.js": "/arturo/static/js/main.a739c934.js",
+    "main.js": "/arturo/static/js/main.134bea1b.js",
     "index.html": "/arturo/index.html",
     "main.e405cf95.css.map": "/arturo/static/css/main.e405cf95.css.map",
-    "main.a739c934.js.map": "/arturo/static/js/main.a739c934.js.map"
+    "main.134bea1b.js.map": "/arturo/static/js/main.134bea1b.js.map"
   },
   "entrypoints": [
     "static/css/main.e405cf95.css",
-    "static/js/main.a739c934.js"
+    "static/js/main.134bea1b.js"
   ]
 }
