@@ -80,15 +80,18 @@ const setToFalse = (bool) =>{
     //   setThereIsError(true);
     //   return true
     // }
-    if(attireAndGear === ""){
-      setToTrue("isAttireAndGear")
-      setThereIsError(true);
-      return true
-    }
+    // if(attireAndGear === ""){
+    //   setToTrue("isAttireAndGear")
+    //   setThereIsError(true);
+    //   return true
+    // }
   
     if(mileage.start ==="" || mileage.end === "" || Number(mileage.start > mileage.end)){
       setToTrue("validMile")
       return true;
+    }else{
+      updateMileage({key:"start",value: Math.abs(Number(mileage.start))})
+      updateMileage({key:"end",value: Math.abs(Number(mileage.end))})
     }
     if(dailySummary === ""){
       setToTrue("isDailySummary")
@@ -214,30 +217,36 @@ const setToFalse = (bool) =>{
             <h2>Shift time {star}</h2>
             <p>Begin:</p>
             <Dropdown format={time.begHr} name={"begHr"} handleChange={(e)=>
-                { dispatch(updateTime({key:"begHr", value:e.target.value}))
-                setToFalse("shiftTime");
-                let hr = Math.abs(Number(time.begHr));
-                let finishHr = Math.abs(Number(time.finishHr));
+                { 
+                if(!Number(e.target.value)) return;
+                let hr = Math.abs(Number(e.target.value));
+
                 let times = [];
-                times.push( hr - 1 < 10 ? "0"+ (hr-1 ) + "55: ": (hr - 1) + "55: ");
-                // times.push(hr < 10 ? "0"+ hr  + "05: ": hr - 1 + "05: ");
-                for(let i = hr; i < hr + 9; i ++ ){
-                    // times.push(i + "00: ")
+                times.push( hr - 1 < 10 ? "0"+ (hr -1 ) + "55: ": (hr -1 ) + "55: ");
+                for(let i = hr; i <= hr + 8; i ++ ){
                     times.push(i < 10 ? "0"+ i  + "00: ": i  + "00: ");
+                    console.log(i)
                   }
-                  times.splice(2, 0, (hr < 10 ? "0"+ hr  + "05: ": hr - 1 + "05: "));
+                  times.splice(2, 0, (hr -1  < 10 ? "0"+ hr  + "05: ": hr - 1 + "05: "));
+                  console.log(times)
+                dispatch(updateTime({key:"begHr", value: hr}))
+                setToFalse("shiftTime");
                 dispatch(updateDailySummary(times.join("\n\n\n")))
+                console.log("hr => " ,hr)
+                console.log("time => " ,time)
+                console.log("value => "  , e.target.value)
               }
               
-            } arr={new Array(24)
-            .join().split(',').map(function(item, index){
-              return ++index;
+            } arr={new Array(25).join().split(',').map(function(item, index){
+              return (index === 0) ? "-" : index++;
               })}/>
           <Dropdown format={time.begMin} name={"begMin"} handleChange={(e)=> {
+             if(!Number(e.target.value)) return;
             dispatch(updateTime({key:"begMin", value:e.target.value}))
           }
-          } arr={new Array(61).join().split(',').map(function(item, index) { 
-            return index;
+          } 
+          arr={new Array(61).join().split(',').map(function(item, index) { 
+            return (index === 0) ? "-" : index++;
           })}
           />
         </div>
@@ -245,15 +254,20 @@ const setToFalse = (bool) =>{
         <div>
             <p>Finish:</p>
           <Dropdown format={time.finishHr} name={"finishHr"} handleChange={(e)=>
-              dispatch(updateTime({key:"finishHr", value:e.target.value})) 
-          } arr={new Array(24)
-            .join().split(',').map(function(item, index){ return ++index;})}/>
+            {
+              if(!Number(e.target.value)) return;
+              dispatch(updateTime({key:"finishHr", value:e.target.value})) }
+          } arr={new Array(25)
+            .join().split(',').map(function(item, index){  return (index === 0) ? "-" : index++;})}/>
           <Dropdown format={time.finishMin} name={"finishMin"} handleChange={
               (e)=>
-              {dispatch(updateTime({key:"finishMin", value:e.target.value}))
+              {
+                if(!Number(e.target.value)) return;
+                dispatch(updateTime({key:"finishMin", value:e.target.value}))
               setToFalse("shiftTime");}
-          } arr={new Array(61).join().split(',').map(function(item, index) { 
-            return index;
+          } 
+          arr={new Array(61).join().split(',').map(function(item, index) { 
+            return (index === 0) ? "-" : index++;
           })}
           />
             {isError.shiftTime && <h3 style={{"textDecoration":"underline", "color":"red"}}>Finish time cannot be the same as begin time</h3>}
@@ -268,20 +282,20 @@ const setToFalse = (bool) =>{
         />
         </StyledDivided>
         <StyledDivided>
-        <TextArea label={"ATTIRE & GEAR"} name={"attireAndGear"} value={attireAndGear} placeholder={"Attire and Gear"}
+        <TextArea label={"ATTIRE & GEAR"} name={"attireAndGear"} value={attireAndGear} placeholder={"N/A"}
         onChange={(e)=>{
             dispatch(updateAttireAndGear(e.target.value))
         }}
         />
         </StyledDivided>
         <StyledDivided>
-        <TextArea label={"ANOMALIES"} name={"anomalies"} value={anomalies} placeholder={"Anomalies"}
+        <TextArea label={"ANOMALIES"} name={"anomalies"} value={anomalies} placeholder={"N/A"}
         onChange={(e)=>{
             dispatch(updateAnomalies(e.target.value))
         }}
         />
         </StyledDivided> <StyledDivided>
-        <TextArea label={"NOTES"} name={"notes"} value={notes} placeholder={"Notes"}
+        <TextArea label={"NOTES"} name={"notes"} value={notes} placeholder={"N/A"}
         onChange={(e)=>{
             dispatch(updateNotes(e.target.value))
         }}
@@ -297,14 +311,24 @@ const setToFalse = (bool) =>{
       <StyledDivided>
         <h2>Mileage {star}</h2>
         <div style={{"display":"flex", "flexDirection":"column", "alignItems":"center", "justifyContent":"center"}}>
-        <Input label={"Start of Shift"} name={"start"} value={mileage.start} placeholder={"Start of shift"} type="number"
+        <Input label={"Start of Shift"} name={"start"} value={mileage.start} placeholder={"Start of shift"} 
         onChange={
-            (e)=>{dispatch(updateMileage({key:"start",value:e.target.value}))}
+            (e)=>{
+              let trimmed =""
+              if(!Number(e.target.value)) trimmed = ""
+              else trimmed = e.target.value;
+              dispatch(updateMileage({key:"start",value: trimmed }))
+          }
         }
         className={isError.validMile ? "error" : ""}
         />      
-          <Input label={"End of Shift"} name={"end"} value={mileage.end} placeholder={"End of Shift"} type="number"
-        onChange={(e)=>{dispatch(updateMileage({key:"end",value:e.target.value}))}
+          <Input label={"End of Shift"} name={"end"} value={mileage.end} placeholder={"End of Shift"} 
+        onChange={(e)=>{
+          let trimmed =""
+          if(!Number(e.target.value)) trimmed = ""
+          else trimmed = e.target.value;
+          dispatch(updateMileage({key:"end",value: trimmed }))
+        }
         }
         />
 

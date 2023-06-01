@@ -6,7 +6,7 @@ fName:{name:"",lastName:""},
 type:'',
 location:"",
 date:{ year: "", month: "", day: "" },
-time:{begHr:"", begMin:"0",  finishHr:"", finishMin:"0" }, 
+time:{begHr: 0, begMin: 0,  finishHr:"", finishMin:"0" }, 
 calcTime:0.0,
 natureOfDetails:"",
 attireAndGear:"",
@@ -46,7 +46,7 @@ export const userInputSlice = createSlice({
             state.expenses = action.payload;
         },
         updateMileage:(state,action) => {
-            state.mileage[action.payload.key] = action.payload.value > 0 ? action.payload.value :0;
+            state.mileage[action.payload.key] = action.payload.value > 0 ? action.payload.value :  action.payload.value;
         },
         updateDailySummary:(state,action) => {
             state.dailySummary =  action.payload;
@@ -61,13 +61,13 @@ export const userInputSlice = createSlice({
             state.email = action.payload;
         },
         updateAll:(state)=>{
-           return initialState;
-      },
-      updateAnomalies:(state,action) => {
-          state.anomalies = action.payload;
-      },
-      updateNotes: (state, action) => {
-          state.notes = action.payload;
+            return initialState;
+        },
+        updateAnomalies:(state,action) => {
+            state.anomalies = action.payload;
+        },
+        updateNotes: (state, action) => {
+            state.notes = action.payload;
       }
     }
   });
