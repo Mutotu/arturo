@@ -1,7 +1,6 @@
 import { headerStyle, restStyle,StyledDiv,StyledDivided} from "../Styles";
 
 const Stage = ({header, rest}) => {
-console.log(header === "DAILY SUMMARY" )
     return (
         <StyledDiv>
             <StyledDivided >

@@ -220,33 +220,27 @@ const setToFalse = (bool) =>{
                 { 
                 if(!Number(e.target.value)) return;
                 let hr = Math.abs(Number(e.target.value));
-
                 let times = [];
                 times.push( hr - 1 < 10 ? "0"+ (hr -1 ) + "55: ": (hr -1 ) + "55: ");
                 for(let i = hr; i <= hr + 8; i ++ ){
                     times.push(i < 10 ? "0"+ i  + "00: ": i  + "00: ");
-                    console.log(i)
                   }
                   times.splice(2, 0, (hr -1  < 10 ? "0"+ hr  + "05: ": hr - 1 + "05: "));
-                  console.log(times)
                 dispatch(updateTime({key:"begHr", value: hr}))
                 setToFalse("shiftTime");
                 dispatch(updateDailySummary(times.join("\n\n\n")))
-                console.log("hr => " ,hr)
-                console.log("time => " ,time)
-                console.log("value => "  , e.target.value)
               }
               
             } arr={new Array(25).join().split(',').map(function(item, index){
-              return (index === 0) ? "-" : index++;
+              return (index === 0) ? 0 : index++;
               })}/>
           <Dropdown format={time.begMin} name={"begMin"} handleChange={(e)=> {
-             if(!Number(e.target.value)) return;
+            if(!Number(e.target.value)) return;
             dispatch(updateTime({key:"begMin", value:e.target.value}))
           }
           } 
-          arr={new Array(61).join().split(',').map(function(item, index) { 
-            return (index === 0) ? "-" : index++;
+          arr={new Array(60).join().split(',').map(function(item, index) { 
+            return (index === 0) ? 0 : index++;
           })}
           />
         </div>
@@ -258,7 +252,7 @@ const setToFalse = (bool) =>{
               if(!Number(e.target.value)) return;
               dispatch(updateTime({key:"finishHr", value:e.target.value})) }
           } arr={new Array(25)
-            .join().split(',').map(function(item, index){  return (index === 0) ? "-" : index++;})}/>
+            .join().split(',').map(function(item, index){  return (index === 0) ? 0 : index++;})}/>
           <Dropdown format={time.finishMin} name={"finishMin"} handleChange={
               (e)=>
               {
@@ -266,8 +260,8 @@ const setToFalse = (bool) =>{
                 dispatch(updateTime({key:"finishMin", value:e.target.value}))
               setToFalse("shiftTime");}
           } 
-          arr={new Array(61).join().split(',').map(function(item, index) { 
-            return (index === 0) ? "-" : index++;
+          arr={new Array(60).join().split(',').map(function(item, index) { 
+            return (index === 0) ? 0 : index++;
           })}
           />
             {isError.shiftTime && <h3 style={{"textDecoration":"underline", "color":"red"}}>Finish time cannot be the same as begin time</h3>}
