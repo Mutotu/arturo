@@ -17,8 +17,7 @@ const Login = () => {
   const handleChange = (e) => {
     setUserInfo(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
-
-  const handleClick = () => {
+  const checkInfo = ()=>{
     if (userInfo.username === MOCKACCOUNT.username && userInfo.password === MOCKACCOUNT.password) {
       dispatch(updateIsLoggedIn(true));
       return navigate('/template');
@@ -27,15 +26,22 @@ const Login = () => {
       return;
     }
   }
+  const handleClick = () => {
+    checkInfo()
+  }
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      checkInfo()
+  }}
 
   return (
-    <StyledContainer>
+    <StyledContainer onKeyDown={handleKeyDown}>
       <StyledForm>
         <StyledTitle>Enter Credentials</StyledTitle>
         <Input name={"username"} placeholder={'username'} label={'Username'} value={userInfo.username} type={"text"} onChange={handleChange} />
         <Input name={"password"} placeholder={'password'} label={'Password'} value={userInfo.password} type={"password"} onChange={handleChange} />
         {errorMessage && <StyledError>{errorMessage}</StyledError>}
-        <StyledButton onClick={handleClick}>Submit</StyledButton>
+        <StyledButton onClick={handleClick} >Submit</StyledButton>
       </StyledForm>
     </StyledContainer>
   );
