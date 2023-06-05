@@ -3,11 +3,12 @@ import { YearPicker, MonthPicker, DayPicker } from "react-dropdown-date";
 import Dropdown from './Components/DropDown';
 import Input from './Components/Input';
 import { useSelector, useDispatch } from "react-redux";
-import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked, updateAnomalies, updateNotes, updateEmail} from './store/userInput/userInputSlice';
+import {updateTime,selectData ,updateLocation, updateName,updateDate,updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary, updateTImeWorked, updateAnomalies, updateNotes, updateChangeOver,updateTakeOver} from './store/userInput/userInputSlice';
 import TextArea from './Components/TextArea';
 import { useNavigate } from 'react-router-dom';
 import { StyledDiv,StyledDivided, styles, inputContainer} from './Styles';
-import { locations } from './defaultData';
+import { locations, checkInMessage } from './defaultData';
+import { initalContact, lastContact, getSubstring, arrMaker } from "./helperFuncs"
 
 
 
@@ -16,7 +17,7 @@ const Template = ()=>{
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const selectedData = useSelector(selectData)
-    const {fName,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary,anomalies, notes, email} = selectedData
+    const {fName,changeover,takeover,time,location,date,natureOfDetails,attireAndGear, expenses, mileage, dailySummary,anomalies, notes, timeWorked } = selectedData
     
     const [isError,setIsError]=useState({
       monthError:false,
@@ -25,6 +26,10 @@ const Template = ()=>{
       locationError:false,
       name:false,
       lastName: false,
+      changeoverName: false,
+      changeoverLastName: false,
+      takeoverName: false,
+      takeoverLastName: false,
       shiftTime: false,
       validMile: false,
       isEmail: false,
@@ -32,14 +37,13 @@ const Template = ()=>{
       isAttireAndGear: false,
       isDailySummary: false
     })
-    const [thereisError, setThereIsError] = useState(false)
+const [thereisError, setThereIsError] = useState(false)
 const setToTrue = (bool) =>{
   setIsError(pre => ({...pre,[bool]: true}))
 }
 const setToFalse = (bool) =>{
   setIsError(pre => ({...pre,[bool]: false}))
 }
-
 
   const errorHandler = ()=>{
     
@@ -74,18 +78,27 @@ const setToFalse = (bool) =>{
       setThereIsError(true);
       return true
     }
-    
-    // if(natureOfDetails === ""){
-    //   setToTrue("isNatureOfDetails")
-    //   setThereIsError(true);
-    //   return true
-    // }
-    // if(attireAndGear === ""){
-    //   setToTrue("isAttireAndGear")
-    //   setThereIsError(true);
-    //   return true
-    // }
-  
+    if(changeover.changeoverName === ""){
+      setToTrue("changeoverName")
+      setThereIsError(true);
+      return true
+    }
+    if(changeover.changeoverLastName === ""){
+      setToTrue("changeoverLastName")
+      setThereIsError(true);
+      return true
+    }
+    if(takeover.takeoverName === ""){
+      setToTrue("takeoverName")
+      setThereIsError(true);
+      return true
+    }
+    if(takeover.takeoverLastName === ""){
+      setToTrue("takeoverLastName")
+      setThereIsError(true);
+      return true
+    }
+
     if(mileage.start ==="" || mileage.end === "" || Number(mileage.start > mileage.end)){
       setToTrue("validMile")
       return true;
@@ -102,18 +115,31 @@ const setToFalse = (bool) =>{
       setToTrue("shiftTime")
       setThereIsError(true);
       return true
-    }else{
-      let hr =Math.abs(Number(time.begHr) -  Number(time.finishHr))
-      let min =Math.abs(Number(time.begMin) -  Number(time.finishMin))
-      dispatch(updateTImeWorked(`${hr}.${min}`))
     }
-
     setThereIsError(false);
-    
     return false;
   }
+
+const checkTimes = () =>{
+  let hr = Number(time.begHr) 
+  let times = [];
+  
+  times.push( hr - 1 < 10 ? "0"+ (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName) : (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName));
+  for(let i = hr; i <=  Number(time.finishHr); i ++ ){
+      times.push(i < 10 ? "0"+ i  + "00: ": i  + "00: ");
+    }
+    times.splice(2, 0, (hr   < 10 ? "0"+ hr  + "05: Checked in/shared Glympse location with GSOC.": hr  + "05: Checked in/shared Glympse location with GSOC."));
+
+    let subStr = getSubstring(times,times.length);
+    times.splice(times.length - 1, 0, (subStr < 10 ? "0"+ String(subStr -1 )+ "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName): parseInt(times[times.length - 1].substring(0, 2)) - 1 + "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName)));
+    for(let i=2; i < times.length; i+=2) {
+        times[i] = times[i] + checkInMessage;
+    }
+    dispatch(updateDailySummary(times.join("\n\n")))
+
+}
+
     const handleClick = ()=>{
-      console.log(dailySummary.split(/(\d.*?:)/g))
       if(!errorHandler()) navigate("/preview")
       else  alert("You have missing data. Scroll up, please")
     }
@@ -126,7 +152,6 @@ const setToFalse = (bool) =>{
       "backgroundColor": 'yellow',
       "padding": '10px'
     }}>Your input is needed where <span style={{"fontSize":"2rem"}}>*</span> is</p>
-   
     return <StyledDiv>
       {mandotoryInput}
       <StyledDivided >
@@ -213,6 +238,57 @@ const setToFalse = (bool) =>{
         </div>
         </StyledDivided>
         <StyledDivided >
+
+      <h2>Changeover {star}</h2>
+      <div style={inputContainer}>
+      <Input className={isError.changeoverName ? "error" : ""} 
+      label={"First Name"} name={"name"} value={changeover.changeoverName} placeholder={"Name"}
+      className={isError.name ? "error" : ""}
+      onChange={(e)=>{
+          dispatch(updateChangeOver({key:"changeoverName",value:e.target.value}))
+          setToFalse("changeoverName")
+      }}
+      />
+      <Input 
+        className={isError.changeoverLastName ? "error" : ""} 
+        label={"Last Name"} name={"lastName"} value={changeover.changeoverLastName} placeholder={"Last Name"}
+        className={isError.changeoverLastName ? "error" : ""}
+      onChange={
+          (e)=>{
+              dispatch(updateChangeOver({key:"changeoverLastName",value:e.target.value}))
+              setToFalse("changeoverLastName")
+          }
+      }
+      />
+      </div>
+      </StyledDivided>
+
+      <StyledDivided >
+
+        <h2>TakeOver {star}</h2>
+        <div style={inputContainer}>
+        <Input className={isError.takeoverName ? "error" : ""} 
+        label={"First Name"} name={"name"} value={takeover.takeoverName} placeholder={"Name"}
+        className={isError.name ? "error" : ""}
+        onChange={(e)=>{
+            dispatch(updateTakeOver({key:"takeoverName",value:e.target.value}))
+            setToFalse("takeoverName")
+        }}
+        />
+        <Input 
+          className={isError.takeoverLastName ? "error" : ""} 
+          label={"Last Name"} name={"lastName"} value={takeover.takeoverLastName} placeholder={"Last Name"}
+          className={isError.takeoverLastName ? "error" : ""}
+        onChange={
+            (e)=>{
+                dispatch(updateTakeOver({key:"takeoverLastName",value:e.target.value}))
+                setToFalse("takeoverLastName")
+            }
+        }
+        />
+        </div>
+        </StyledDivided>
+        <StyledDivided >
           <div>
             <h2>Shift time {star}</h2>
             <p>Begin:</p>
@@ -220,52 +296,38 @@ const setToFalse = (bool) =>{
                 { 
                 if(!Number(e.target.value)) return;
                 let hr = Math.abs(Number(e.target.value));
-                let times = [];
-                times.push( hr - 1 < 10 ? "0"+ (hr -1 ) + "55: ": (hr -1 ) + "55: ");
-                for(let i = hr; i <= hr + 8; i ++ ){
-                    times.push(i < 10 ? "0"+ i  + "00: ": i  + "00: ");
-                  }
-                  times.splice(2, 0, (hr -1  < 10 ? "0"+ hr  + "05: ": hr - 1 + "05: "));
-                dispatch(updateTime({key:"begHr", value: hr}))
-                setToFalse("shiftTime");
-                dispatch(updateDailySummary(times.join("\n\n\n")))
+                  dispatch(updateTime({key:"begHr", value: hr}))
+                  setToFalse("shiftTime"); 
               }
-              
-            } arr={new Array(25).join().split(',').map(function(item, index){
-              return (index === 0) ? 0 : index++;
-              })}/>
+            } arr={arrMaker(25)}/>
           <Dropdown format={time.begMin} name={"begMin"} handleChange={(e)=> {
             if(!Number(e.target.value)) return;
             dispatch(updateTime({key:"begMin", value:e.target.value}))
           }
           } 
-          arr={new Array(60).join().split(',').map(function(item, index) { 
-            return (index === 0) ? 0 : index++;
-          })}
+          arr={arrMaker(60)}
           />
         </div>
-
         <div>
             <p>Finish:</p>
           <Dropdown format={time.finishHr} name={"finishHr"} handleChange={(e)=>
             {
               if(!Number(e.target.value)) return;
-              dispatch(updateTime({key:"finishHr", value:e.target.value})) }
-          } arr={new Array(25)
-            .join().split(',').map(function(item, index){  return (index === 0) ? 0 : index++;})}/>
+              dispatch(updateTime({key:"finishHr", value:e.target.value})) 
+            }
+          } arr={arrMaker(25)}/>
           <Dropdown format={time.finishMin} name={"finishMin"} handleChange={
-              (e)=>
-              {
+              (e)=>{
                 if(!Number(e.target.value)) return;
                 dispatch(updateTime({key:"finishMin", value:e.target.value}))
-              setToFalse("shiftTime");}
-          } 
-          arr={new Array(60).join().split(',').map(function(item, index) { 
-            return (index === 0) ? 0 : index++;
-          })}
+                setToFalse("shiftTime");
+                }   } 
+              arr={arrMaker(60)}
           />
+          
             {isError.shiftTime && <h3 style={{"textDecoration":"underline", "color":"red"}}>Finish time cannot be the same as begin time</h3>}
         </div>
+        <button style={styles}  onClick = {checkTimes}>Check the times </button>
         </StyledDivided>
         <StyledDivided>
           <TextArea label={"NATURE OF DETAILS"} name={"natureOfDetails"} value={natureOfDetails} placeholder={"Provide agile response and security support for key Members of Leadership for Connector. "}
@@ -276,7 +338,7 @@ const setToFalse = (bool) =>{
         />
         </StyledDivided>
         <StyledDivided>
-        <TextArea label={"ATTIRE & GEAR"} name={"attireAndGear"} value={attireAndGear} placeholder={"N/A"}
+        <TextArea label={"ATTIRE & GEAR"} name={"attireAndGear"} value={attireAndGear} placeholder={"Approved Crisis24 field attire, approved Crisis24 gear, and medical bag minus 417.  "}
         onChange={(e)=>{
             dispatch(updateAttireAndGear(e.target.value))
         }}
@@ -335,9 +397,7 @@ const setToFalse = (bool) =>{
           dispatch(updateDailySummary(e.target.value))
         }
       } 
-        onClick={() => {
-          setExpanded(true)
-    }
+        onClick={() => setExpanded(true)
     }
         />
           </div>

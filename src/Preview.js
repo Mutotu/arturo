@@ -33,7 +33,7 @@ const Preview = () =>{
         {"EXPENSES": expenses ? expenses : "None"},
         {"MILEAGE": "Start of Shift: " + mileage.start +" // " + "End of Shift: "+mileage.end},
         {"DAILY SUMMARY": dailySummary },
-        {"ANOMALIES": anomalies ? anomalies : "N/A"},
+        {"ANOMALIES": anomalies ? anomalies : "Approved Crisis24 field attire, approved Crisis24 gear, and medical bag minus 417.  "},
         {"NOTES": notes ? notes : "N/A"},
         {"Contacts": `
         Example(Director - Gloabl Protective Solutions): 123-456-7890

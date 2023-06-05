@@ -2,7 +2,9 @@ import {  createSlice } from "@reduxjs/toolkit";
 import {capitalLetter} from '../../helperFuncs'
 
 const initialState = {
-fName:{name:"",lastName:""},
+fName: { name:"", lastName:"" },
+changeover: { changeoverName: "", changeoverLastName: "" },
+takeover: { takeoverName: "", takeoverLastName: "" },
 type:'',
 location:"",
 date:{ year: "", month: "", day: "" },
@@ -32,6 +34,12 @@ export const userInputSlice = createSlice({
         },
         updateName:(state,action)=>{
             state.fName[action.payload.key] = capitalLetter(action.payload.value)
+        }, 
+        updateChangeOver:(state,action)=>{
+            state.changeover[action.payload.key] = capitalLetter(action.payload.value)
+        },
+        updateTakeOver:(state,action)=>{
+            state.takeover[action.payload.key] = capitalLetter(action.payload.value)
         },
         updateDate:(state,action)=>{
             state.date[action.payload.key]=action.payload.value
@@ -74,7 +82,7 @@ export const userInputSlice = createSlice({
   
 
 export const {
-    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary,updateTImeWorked, updateIsLoggedIn, updateEmail, updateAll, updateAnomalies, updateNotes
+    updateTime,updateLocation,updateName,updateDate, updateNatureOfDetails,updateAttireAndGear, updateExpenses, updateMileage, updateDailySummary,updateTImeWorked, updateIsLoggedIn, updateEmail, updateAll, updateAnomalies, updateNotes, updateChangeOver,updateTakeOver
   } = userInputSlice.actions;
   export const selectData = (state) => state.userinput
   export default userInputSlice.reducer;
