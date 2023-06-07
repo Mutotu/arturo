@@ -10,7 +10,10 @@ import { StyledDiv,StyledDivided, styles, inputContainer} from './Styles';
 import { locations, checkInMessage } from './defaultData';
 import { initalContact, lastContact, getSubstring, arrMaker } from "./helperFuncs"
 
-
+//save the data to local storage so it is still there when the web reloded
+// when the begining hr is more than 10 , it doen'snt calcualte correctyl //
+//remove the hrs that are not rewuired in the daily dummary and //
+//paste the check on the correct hrs only//
 
 const Template = ()=>{
   const [expanded, setExpanded] = useState(false);
@@ -122,17 +125,24 @@ const setToFalse = (bool) =>{
 
 const checkTimes = () =>{
   let hr = Number(time.begHr) 
+  let finHr =  Number(time.finishHr)
+  finHr = finHr > hr ? finHr - hr : finHr + (24 - hr);
   let times = [];
+  let counter = 1;
   
   times.push( hr - 1 < 10 ? "0"+ (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName) : (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName));
-  for(let i = hr; i <=  Number(time.finishHr); i ++ ){
-      times.push(i < 10 ? "0"+ i  + "00: ": i  + "00: ");
+  for(let i = hr; i <= hr + finHr; i+=2){
+      // times.push(i < 10 ? "0" + i  + "00: ": i + "00: ");
+   
+    times.push(i > 24 ? "0" + (i % 24 === 0 ? "00" :  i % 24 )+ "00: ": (i % 24 === 0 ? "00" :  i % 24 ) + "00: " );
+      // times.push(i % 24  + "00: ")
     }
-    times.splice(2, 0, (hr   < 10 ? "0"+ hr  + "05: Checked in/shared Glympse location with GSOC.": hr  + "05: Checked in/shared Glympse location with GSOC."));
+    console.log(times, "=====> " , finHr)
+    times.splice(2, 0, (hr < 10 ? "0"+ hr === 24 ? "00": hr + "05: Checked in/shared Glympse location with GSOC.": hr  + "05: Checked in/shared Glympse location with GSOC."));
 
     let subStr = getSubstring(times,times.length);
     times.splice(times.length - 1, 0, (subStr < 10 ? "0"+ String(subStr -1 )+ "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName): parseInt(times[times.length - 1].substring(0, 2)) - 1 + "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName)));
-    for(let i=2; i < times.length; i+=2) {
+    for(let i=0; i < times.length; i++) {
         times[i] = times[i] + checkInMessage;
     }
     dispatch(updateDailySummary(times.join("\n\n")))
