@@ -128,7 +128,7 @@ const checkTimes = () =>{
   let finHr =  Number(time.finishHr)
   finHr = finHr > hr ? finHr - hr : finHr + (24 - hr);
   let times = [];
-  let counter = 1;
+ 
   
   times.push( hr - 1 < 10 ? "0"+ (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName) : (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName));
   for(let i = hr; i <= hr + finHr; i+=2){
@@ -136,15 +136,17 @@ const checkTimes = () =>{
    
     times.push(i > 24 ? "0" + (i % 24 === 0 ? "00" :  i % 24 )+ "00: ": (i % 24 === 0 ? "00" :  i % 24 ) + "00: " );
       // times.push(i % 24  + "00: ")
+   
     }
-    console.log(times, "=====> " , finHr)
     times.splice(2, 0, (hr < 10 ? "0"+ hr === 24 ? "00": hr + "05: Checked in/shared Glympse location with GSOC.": hr  + "05: Checked in/shared Glympse location with GSOC."));
 
     let subStr = getSubstring(times,times.length);
     times.splice(times.length - 1, 0, (subStr < 10 ? "0"+ String(subStr -1 )+ "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName): parseInt(times[times.length - 1].substring(0, 2)) - 1 + "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName)));
-    for(let i=0; i < times.length; i++) {
+    for(let i=1; i < times.length - 1; i++) {
         times[i] = times[i] + checkInMessage;
     }
+    let lastIndexToInsert =  Number(time.finishHr) < 10 ? "0"+ time.finishHr+ "00: "  + fName.name + " " + fName.lastName + " off shift" : time.finishHr+ "00: "  + fName.name + " " + fName.lastName + " off shift";
+    times.splice(times.length - 1, 1, lastIndexToInsert);
     dispatch(updateDailySummary(times.join("\n\n")))
 
 }
