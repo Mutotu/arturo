@@ -10,11 +10,6 @@ import { StyledDiv,StyledDivided, styles, inputContainer} from './Styles';
 import { locations, checkInMessage } from './defaultData';
 import { initalContact, lastContact, getSubstring, arrMaker } from "./helperFuncs"
 
-//save the data to local storage so it is still there when the web reloded
-// when the begining hr is more than 10 , it doen'snt calcualte correctyl //
-//remove the hrs that are not rewuired in the daily dummary and //
-//paste the check on the correct hrs only//
-
 const Template = ()=>{
   const [expanded, setExpanded] = useState(false);
     const navigate = useNavigate();
@@ -128,25 +123,21 @@ const checkTimes = () =>{
   let finHr =  Number(time.finishHr)
   finHr = finHr > hr ? finHr - hr : finHr + (24 - hr);
   let times = [];
- 
-  
+
   times.push( hr - 1 < 10 ? "0"+ (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName) : (hr -1 ) + "55: " + initalContact(changeover.changeoverName,changeover.changeoverLastName));
   for(let i = hr; i <= hr + finHr; i+=2){
-      // times.push(i < 10 ? "0" + i  + "00: ": i + "00: ");
-   
-    times.push(i > 24 ? "0" + (i % 24 === 0 ? "00" :  i % 24 )+ "00: ": (i % 24 === 0 ? "00" :  i % 24 ) + "00: " );
-      // times.push(i % 24  + "00: ")
-   
+      times.push(i > 24 ? "0" + (i % 24 === 0 ? "00" :  i % 24 )+ "00: ": (i % 24 === 0 ? "00" :  i % 24 ) + "00: " );
     }
-    times.splice(2, 0, (hr < 10 ? "0"+ hr === 24 ? "00": hr + "05: Checked in/shared Glympse location with GSOC.": hr  + "05: Checked in/shared Glympse location with GSOC."));
+  times.splice(2, 0, (hr < 10 ? "0"+ hr === 24 ? "00": hr + "05: Checked in/shared Glympse location with GSOC.": hr  + "05: Checked in/shared Glympse location with GSOC."));
 
-    let subStr = getSubstring(times,times.length);
+  let subStr = getSubstring(times,times.length);
     times.splice(times.length - 1, 0, (subStr < 10 ? "0"+ String(subStr -1 )+ "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName): parseInt(times[times.length - 1].substring(0, 2)) - 1 + "55: " + lastContact(takeover.takeoverName, takeover.takeoverLastName)));
     for(let i=1; i < times.length - 1; i++) {
         times[i] = times[i] + checkInMessage;
     }
     let lastIndexToInsert =  Number(time.finishHr) < 10 ? "0"+ time.finishHr+ "00: "  + fName.name + " " + fName.lastName + " off shift" : time.finishHr+ "00: "  + fName.name + " " + fName.lastName + " off shift";
     times.splice(times.length - 1, 1, lastIndexToInsert);
+    console.log(lastIndexToInsert)
     dispatch(updateDailySummary(times.join("\n\n")))
 
 }
@@ -171,7 +162,6 @@ const checkTimes = () =>{
         <h2>DATE & LOCATION: {star}</h2>
         <MonthPicker
         defaultValue={"Month"}
-        // numeric 
         endYearGiven 
         year={date.year} 
         value={date.month} 
@@ -250,7 +240,6 @@ const checkTimes = () =>{
         </div>
         </StyledDivided>
         <StyledDivided >
-
       <h2>Changeover {star}</h2>
       <div style={inputContainer}>
       <Input className={isError.changeoverName ? "error" : ""} 
@@ -313,8 +302,7 @@ const checkTimes = () =>{
               }
             } arr={arrMaker(25)}/>
           <Dropdown format={time.begMin} name={"begMin"} handleChange={(e)=> {
-            if(!Number(e.target.value)) return;
-            dispatch(updateTime({key:"begMin", value:e.target.value}))
+            dispatch(updateTime({key:"begMin", value: e.target.value === "0" ? "0" : e.target.value  }))
           }
           } 
           arr={arrMaker(60)}
@@ -330,8 +318,7 @@ const checkTimes = () =>{
           } arr={arrMaker(25)}/>
           <Dropdown format={time.finishMin} name={"finishMin"} handleChange={
               (e)=>{
-                if(!Number(e.target.value)) return;
-                dispatch(updateTime({key:"finishMin", value:e.target.value}))
+                dispatch(updateTime({key:"finishMin", value: e.target.value === "0" ? "0" : e.target.value }))
                 setToFalse("shiftTime");
                 }   } 
               arr={arrMaker(60)}
