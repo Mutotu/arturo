@@ -12,6 +12,15 @@ const Preview = () => {
     const dispatch = useDispatch();
     const { year, month, day } = date;
     const numberedMonth = Number(month);
+    const contacts = [`Blake Crider (Director – Global Protective Solutions): 650-374-6602.`,
+        `Kcrystal Torres (Connector – Operations Manager): 650-374-6612.`,
+        `Nathaly Pacheco (Connector - Senior Team Leader): 650-476-3448.`,
+        `Matthew Gonzalez (Connector LA - Team Leader): 818-312-1657.`,
+        `ART Shift Leader: 650-788-4099.`,
+        `Protective Intelligence Center: 855-461-8338.`,
+        `GSOC ART Desk: 650-384-2360.`,
+        `Steven Keller (Meta - Manager of Global Security Protective Services, Special Teams): 650-885-1845.`,
+        `Megan Ellis (Meta - Head of Global Security Protective Services, Residential Programs): 650-714-6203.`]
 
     const headersAndInputs = [
         {
@@ -39,16 +48,7 @@ const Preview = () => {
         { "ANOMALIES": anomalies ? anomalies : "Approved Crisis24 field attire, approved Crisis24 gear, and medical bag minus 417.  " },
         { "NOTES": notes ? notes : "N/A" },
         {
-            "Contacts": `Blake Crider (Director – Global Protective Solutions): 650-374-6602.
-        Kcrystal Torres (Connector – Operations Manager): 650-374-6612.                               
-        Nathaly Pacheco (Connector - Senior Team Leader): 650-476-3448.                                  
-        Matthew Gonzalez (Connector LA - Team Leader): 818-312-1657.                                          
-        ART Shift Leader: 650-788-4099.                                  
-        Protective Intelligence Center: 855-461-8338.                                                            
-        GSOC ART Desk: 650-384-2360.                                  
-        Steven Keller (Meta - Manager of Global Security Protective Services, Special Teams): 650-885 1845.                               
-        Megan Ellis (Meta - Head of Global Security Protective Services, Residential Programs): 650-714-6203.     
-        `
+            "Contacts": contacts.join("\n")
         }
     ]
 
