@@ -12,3 +12,16 @@ code {
     monospace;
 }
 
+/* Media Query for Mobile Devices */
+@media only screen and (max-width: 767px) {
+  body {
+    /* Adjust margin or padding as needed */
+    margin: 4rem;
+
+  }
+  
+  /* Adjust font-size or other styles as needed */
+  body, code {
+    font-size: 14px;
+  }
+}
